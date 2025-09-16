@@ -1,0 +1,59 @@
+"use client";
+
+import React from "react";
+import Link from "next/link";
+import Image from "next/image";
+import DateTime from "./DateTime";
+
+const Header: React.FC = () => {
+  return (
+    <header className="w-full shadow-lg z-50 bg-yellow-400 dark:bg-gray-800 transition-colors duration-300">
+      {/* Top Section */}
+      <div className="flex flex-col md:flex-row justify-between items-center px-4 md:px-6 py-4 min-w-[320px] gap-3 md:gap-0">
+        {/* Logo Left */}
+        <div className="flex items-center gap-3 flex-1 justify-center md:justify-start">
+          <Image
+            src="/image/kbmhs-logo.png"
+            alt="logo"
+            width={80}
+            height={80}
+            className="rounded"
+          />
+          
+      </div>
+
+        {/* School Name Center */}
+        <div className="flex-1 flex justify-center">
+  <h1 className="text-base sm:text-lg md:text-2xl lg:text-3xl font-extrabold text-center text-black dark:text-white whitespace-nowrap overflow-hidden truncate transition-colors duration-300">
+    Kumulli Bachchu Mia Model High School
+  </h1>
+</div>
+
+
+        {/* Registration / Login Buttons Right */}
+        <div className="flex gap-3 md:gap-4 flex-1 justify-center md:justify-end">
+          <Link href="/registration">
+            <button className="px-3 sm:px-4 py-2 bg-[#f89b29] dark:bg-orange-600 text-black dark:text-white font-semibold rounded-lg shadow-md hover:bg-green-500 dark:hover:bg-green-500 hover:text-white transition-colors duration-300 text-sm sm:text-base">
+              Registration
+            </button>
+          </Link>
+
+          <Link href="/login">
+            <button className="px-3 sm:px-4 py-2 bg-[#f89b29] dark:bg-orange-600 text-black dark:text-white font-semibold rounded-lg shadow-md hover:bg-green-500 dark:hover:bg-green-500 hover:text-white transition-colors duration-300 text-sm sm:text-base">
+              Login
+            </button>
+          </Link>
+        </div>
+      </div>
+
+      {/* Established + Location */}
+      <div className="text-center text-brown-700 dark:text-gray-300 font-bold text-xs sm:text-sm md:text-base pb-2 transition-colors duration-300">
+        <p>Established: 2012</p>
+        <p className="text-green-700 dark:text-green-400">Manikganj Sadar, Manikganj-1800</p>
+      </div>
+      
+    </header>
+  );
+};
+
+export default Header;
