@@ -13,6 +13,9 @@ import InteractiveImageSlider from "@/components/InteractiveImageSlider";
 import HeadTeacherCard from "@/components/HeadTeacherCard";
 import TeacherSlider from "@/components/TeacherSlider";
 import ShiningStars from "../components/ShiningStars";
+import SchoolMapEmbed from "@/components/SchoolFooter";
+
+
 
 
 export default function HomePage() {
@@ -127,7 +130,11 @@ export default function HomePage() {
         <WeatherCard />
       </div>
 
-     
+   <div className="space-y-6 px-4 py-6">
+       <SchoolMapEmbed />
+    </div>
+
+
 
     </main>
   );

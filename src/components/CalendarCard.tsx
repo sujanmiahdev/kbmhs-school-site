@@ -5,7 +5,7 @@ import React from "react";
 const CalendarCard = () => {
   return (
     <div className="max-w-3/3 mx-3 p-0">
-      <div className="bg-white rounded-2xl shadow-lg p-1">
+      <div className="bg-white rounded-2xl shadow-lg p-1 hover:shadow-2xl hover:scale-[1.02] transform-gpu">
         <h2 className=" font-bold text-3xl mb-2 text-center text-gray-800">
           📅 Bangladesh Government Holidays
         </h2>

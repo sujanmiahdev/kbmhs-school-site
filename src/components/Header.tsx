@@ -48,6 +48,7 @@ const Header: React.FC = () => {
 
       {/* Established + Location */}
       <div className="text-center text-brown-700 dark:text-gray-300 font-bold text-xs sm:text-sm md:text-base pb-2 transition-colors duration-300">
+        <p className="text-red-600">EIIN NO: 135585</p>
         <p>Established: 2012</p>
         <p className="text-green-700 dark:text-green-400">Manikganj Sadar, Manikganj-1800</p>
       </div>

@@ -66,9 +66,9 @@ const GoogleStyleWeatherCard = () => {
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg p-6 max-w-3/3  mx-3 text-gray-800">
+    <div className="bg-white rounded-2xl shadow-lg p-6 max-w-3/3  mx-3 text-gray-800 hover:shadow-2xl hover:scale-[1.02] transform-gpu">
       {/* City & Temp */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-4 ">
         <h2 className="text-xl font-bold">{weather.city}</h2>
         <p className="text-3xl font-bold">{Math.round(weather.temp)}°C</p>
       </div>
