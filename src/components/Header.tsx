@@ -1,9 +1,8 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
 import Image from "next/image";
-import DateTime from "./DateTime";
+import AuthButtons from "./AuthButtons"; // Import the new component
 
 const Header: React.FC = () => {
   return (
@@ -19,31 +18,17 @@ const Header: React.FC = () => {
             height={80}
             className="rounded"
           />
-          
-      </div>
+        </div>
 
         {/* School Name Center */}
         <div className="flex-1 flex justify-center">
-  <h1 className="text-base sm:text-lg md:text-2xl lg:text-3xl font-extrabold text-center text-black dark:text-white whitespace-nowrap overflow-hidden truncate transition-colors duration-300">
-    Kumulli Bachchu Mia Model High School
-  </h1>
-</div>
-
-
-        {/* Registration / Login Buttons Right */}
-        <div className="flex gap-3 md:gap-4 flex-1 justify-center md:justify-end">
-          <Link href="/registration">
-            <button className="px-3 sm:px-4 py-2 bg-[#f89b29] dark:bg-orange-600 text-black dark:text-white font-semibold rounded-lg shadow-md hover:bg-green-500 dark:hover:bg-green-500 hover:text-white transition-colors duration-300 text-sm sm:text-base">
-              Registration
-            </button>
-          </Link>
-
-          <Link href="/login">
-            <button className="px-3 sm:px-4 py-2 bg-[#f89b29] dark:bg-orange-600 text-black dark:text-white font-semibold rounded-lg shadow-md hover:bg-green-500 dark:hover:bg-green-500 hover:text-white transition-colors duration-300 text-sm sm:text-base">
-              Login
-            </button>
-          </Link>
+          <h1 className="text-base sm:text-lg md:text-2xl lg:text-3xl font-extrabold text-center text-black dark:text-white whitespace-nowrap overflow-hidden truncate transition-colors duration-300">
+            Kumulli Bachchu Mia Model High School
+          </h1>
         </div>
+
+        {/* Auth Buttons Right */}
+        <AuthButtons />
       </div>
 
       {/* Established + Location */}
@@ -52,7 +37,6 @@ const Header: React.FC = () => {
         <p>Established: 2012</p>
         <p className="text-green-700 dark:text-green-400">Manikganj Sadar, Manikganj-1800</p>
       </div>
-      
     </header>
   );
 };

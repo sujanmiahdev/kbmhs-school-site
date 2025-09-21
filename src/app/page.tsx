@@ -14,6 +14,7 @@ import HeadTeacherCard from "@/components/HeadTeacherCard";
 import TeacherSlider from "@/components/TeacherSlider";
 import ShiningStars from "../components/ShiningStars";
 import SchoolMapEmbed from "@/components/SchoolFooter";
+import AuthButtons from "@/components/AuthButtons"; 
 
 
 
@@ -92,8 +93,10 @@ export default function HomePage() {
   return (
     <main className="max-w-7xl mx-auto p-0">
 
+
       {/* Header + Navbar + Breaking News */}
       <Header />
+     
       <Navbar menuItems={menuItems} />
       <BreakingNews newsItems={news} speed={100} />
 
