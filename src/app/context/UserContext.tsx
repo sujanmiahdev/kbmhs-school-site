@@ -1,25 +1,30 @@
-"use client";
+'use client';
 
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, ReactNode, FC } from "react";
 
+// ১. Context type define
 interface UserContextType {
   userType: string;
   setUserType: (type: string) => void;
 }
 
+// ২. Context create
 const UserContext = createContext<UserContextType>({
-  userType: "",
+  userType: "student", // default
   setUserType: () => {},
 });
 
+// ৩. Custom hook for easy access
 export const useUser = () => useContext(UserContext);
 
-interface Props {
+// ৪. Props interface
+interface UserProviderProps {
   children: ReactNode;
 }
 
-export const UserProvider = ({ children }: Props) => {
-  const [userType, setUserType] = useState<string>("student"); // default
+// ৫. UserProvider (Client Component)
+export const UserProvider: FC<UserProviderProps> = ({ children }) => {
+  const [userType, setUserType] = useState<string>("student");
 
   return (
     <UserContext.Provider value={{ userType, setUserType }}>
