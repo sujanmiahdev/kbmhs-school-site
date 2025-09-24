@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { UserProvider } from "./context/UserContext"; // already client component
+import { UserProvider } from "./context/UserContext"; 
 
 export const metadata: Metadata = {
   title: "Kumulli Bachchu Mia Model High School",
@@ -15,7 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {/* Client component wrap করা হয়েছে */}
+        {/* Client component wrap */}
         <UserProvider>
           {children}
         </UserProvider>

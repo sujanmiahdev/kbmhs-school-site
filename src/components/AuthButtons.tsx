@@ -13,7 +13,7 @@ const AuthButtons: React.FC = () => {
       student: "/registration/student",
       teacher: "/registration/teacher",
       parent: "/registration/parent",
-      admin: "/registration/admin",
+      
     };
 
     // যদি userType না থাকে বা unknown হয়, default /registration এ যাবে
