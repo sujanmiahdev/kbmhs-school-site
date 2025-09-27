@@ -21,6 +21,8 @@ const studentSchema = z
       .regex(/^01[3-9]\d{8}$/, 'Invalid Bangladeshi mobile number'),
     class: z.string().min(1, 'Class is required'),
     group: z.string().min(1, 'Group is required'),
+    passingYear: z.string().min(1, 'Passing Year is required'),
+    bloodGroup: z.string().optional(),
     password: z.string().min(6, 'Password must be at least 6 characters'),
     confirmPassword: z.string().min(1, 'Confirm Password is required'),
   })
@@ -34,9 +36,12 @@ type StudentForm = z.infer<typeof studentSchema>;
 export default function StudentRegistrationForm() {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
+
   const [selectedClass, setSelectedClass] = useState('');
   const [profileFile, setProfileFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [passingYear, setPassingYear] = useState('');
+  const [bloodGroup, setBloodGroup] = useState('');
 
   const {
     register,
@@ -62,6 +67,9 @@ export default function StudentRegistrationForm() {
     '11': ['Science', 'Commerce', 'Arts'],
     '12': ['Science', 'Commerce', 'Arts'],
   };
+
+  // --- Passing Year Options ---
+  const years = Array.from({ length: 50 }, (_, i) => new Date().getFullYear() - i);
   const groups = selectedClass ? classGroups[selectedClass] : [];
 
   const handleFileChange = (file: File) => {
@@ -72,7 +80,7 @@ export default function StudentRegistrationForm() {
   };
 
   const handleSubmitForm = (data: StudentForm) => {
-    console.log('Form submitted:', { ...data, profileFile });
+    console.log('Form submitted:', { ...data, profileFile, passingYear, bloodGroup });
     alert('Form submitted! Check console for data.');
   };
 
@@ -84,6 +92,8 @@ export default function StudentRegistrationForm() {
       <CheckCircle2 className="w-5 h-5 text-green-600 ml-2" />
     );
   };
+
+  const inputClass = 'mt-1 w-full border p-2 rounded-lg h-11';
 
   return (
     <div className="relative max-w-4xl mx-auto p-4">
@@ -176,7 +186,41 @@ export default function StudentRegistrationForm() {
             {errors.group && <span className="text-red-600 text-sm">{errors.group.message}</span>}
           </label>
 
-          {/* Row 5: Password | Confirm Password */}
+          {/* Row 5: Passing year | Blood group */}
+          <label className="flex flex-col">
+            <span className="text-sm font-medium text-slate-700">Passing Year *</span>
+            <select
+              value={passingYear}
+              onChange={(e) => setPassingYear(e.target.value)}
+              className={inputClass}
+            >
+              <option value="">Select Passing Year</option>
+              {years.map((y) => <option key={y} value={y}>{y}</option>)}
+            </select>
+            {errors.passingYear && <span className="text-red-600 text-sm">{errors.passingYear.message}</span>}
+          </label>
+
+          <label className="flex flex-col">
+  <span className="text-sm font-medium text-slate-700">Blood Group *</span>
+  <select
+    value={bloodGroup}
+    onChange={(e) => setBloodGroup(e.target.value)}
+    className={inputClass}
+  >
+    <option value="">Select Blood Group</option>
+    <option value="A+">A+</option>
+    <option value="A-">A-</option>
+    <option value="B+">B+</option>
+    <option value="B-">B-</option>
+    <option value="O+">O+</option>
+    <option value="O-">O-</option>
+    <option value="AB+">AB+</option>
+    <option value="AB-">AB-</option>
+  </select>
+  {errors.bloodGroup && <span className="text-red-600 text-sm">{errors.bloodGroup.message}</span>}
+</label>
+
+          {/* Row 6: Password | Confirm Password */}
           <label className="flex flex-col relative">
             <span className="text-sm font-medium text-slate-700">Password *</span>
             <input type="password" {...register('password')} placeholder="Enter password" className="mt-1 w-full border p-2 rounded-lg h-11 pr-8" />
@@ -190,7 +234,6 @@ export default function StudentRegistrationForm() {
             <InputStatusIcon fieldName="confirmPassword" />
             {errors.confirmPassword && <span className="text-red-600 text-sm">{errors.confirmPassword.message}</span>}
           </label>
-
         </div>
 
         {/* Profile Picture */}

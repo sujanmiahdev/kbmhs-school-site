@@ -2,27 +2,27 @@
 
 import { createContext, useContext, useState, ReactNode, FC } from "react";
 
-// ১. Context type define
+// Context type define
 interface UserContextType {
   userType: string;
   setUserType: (type: string) => void;
 }
 
-// ২. Context create
+// Context create
 const UserContext = createContext<UserContextType>({
   userType: "student", // default
   setUserType: () => {},
 });
 
-// ৩. Custom hook for easy access
+// Custom hook for easy access
 export const useUser = () => useContext(UserContext);
 
-// ৪. Props interface
+// Props interface
 interface UserProviderProps {
   children: ReactNode;
 }
 
-// ৫. UserProvider (Client Component)
+// UserProvider (Client Component)
 export const UserProvider: FC<UserProviderProps> = ({ children }) => {
   const [userType, setUserType] = useState<string>("student");
 

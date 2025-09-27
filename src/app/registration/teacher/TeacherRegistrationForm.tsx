@@ -152,7 +152,7 @@ export default function TeacherRegistrationForm() {
 
       {/* Form */}
       <form onSubmit={handleSubmit} className="space-y-6 max-w-7xl mx-auto pt-0 ">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-3 gap-6">
 
           {/* -------- Column 1 -------- */}
           <div className="space-y-4">

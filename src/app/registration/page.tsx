@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import TeacherRegistrationForm from "@/app/registration/teacher/TeacherRegistrationForm";
 import StudentRegistrationForm from "@/app/registration/student/StudentRegistrationForm";
+import ParentRegistrationForm from "@/app/registration/parent/ParentRegistrationForm";
 
 export default function RegistrationSelector() {
   const [role, setRole] = useState("");
@@ -94,6 +95,23 @@ export default function RegistrationSelector() {
           <TeacherRegistrationForm />
         </motion.div>
       )}
+
+       {/* parent Registration Form Wide */}
+      {role === "parent" && (
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="w-full max-w-4xl mt-2 p-8 bg-white dark:bg-gray-800 rounded-2xl shadow-lg transition-colors duration-500"
+        >
+          <h1 className="text-2xl text-center font-semibold mb-4 ">parent Registration</h1>
+          <p className="text-sm text-center text-slate-600 mb-6">
+            Create an account to access the parent dashboard.
+          </p>
+          <ParentRegistrationForm />
+        </motion.div>
+      )}
+
 
     </div>
   );
