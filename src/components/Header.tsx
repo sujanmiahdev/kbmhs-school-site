@@ -2,9 +2,12 @@
 
 import React from "react";
 import Image from "next/image";
-import AuthButtons from "./AuthButtons"; // Import the new component
+import AuthButtons from "./AuthButtons";
+import { usePathname } from "next/navigation";
 
 const Header: React.FC = () => {
+  const pathname = usePathname();
+
   return (
     <header className="w-full shadow-lg z-50 bg-yellow-400 dark:bg-gray-800 transition-colors duration-300">
       {/* Top Section */}
@@ -27,15 +30,20 @@ const Header: React.FC = () => {
           </h1>
         </div>
 
-        {/* Auth Buttons Right */}
-        <AuthButtons />
+        {/* Auth Buttons Right / Placeholder */}
+        <div className="flex-1 flex justify-center md:justify-end">
+          {pathname === "/" ? <AuthButtons /> : <div className="w-[120px]" />} 
+          {/* placeholder so that center stays balanced */}
+        </div>
       </div>
 
       {/* Established + Location */}
       <div className="text-center text-brown-700 dark:text-gray-300 font-bold text-xs sm:text-sm md:text-base pb-2 transition-colors duration-300">
         <p className="text-red-600">EIIN NO: 135585</p>
         <p>Established: 2012</p>
-        <p className="text-green-700 dark:text-green-400">Manikganj Sadar, Manikganj-1800</p>
+        <p className="text-green-700 dark:text-green-400">
+          Manikganj Sadar, Manikganj-1800
+        </p>
       </div>
     </header>
   );

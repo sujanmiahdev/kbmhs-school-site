@@ -14,7 +14,7 @@ import HeadTeacherCard from "@/components/HeadTeacherCard";
 import TeacherSlider from "@/components/TeacherSlider";
 import ShiningStars from "../components/ShiningStars";
 import SchoolMapEmbed from "@/components/SchoolFooter";
-import AuthButtons from "@/components/AuthButtons"; 
+
 
 
 
@@ -35,42 +35,7 @@ export default function HomePage() {
     { id: 5, title: "প্রতারক চক্র হতে জরুরী সতর্কীকরণ বিজ্ঞপ্তি", link: "#", date: "5 May 2025" },
   ];
 
-  const menuItems = [
-    { name: "Home", link: "/" },
-    { name: "Institute", dropdown: [
-      { name: "Welcome Speech", link: "#" },
-      { name: "Institute Details", link: "#" },
-      { name: "Governing Body", link: "#" },
-      { name: "Director General", link: "#" }
-    ] },
-    { name: "Administration", link: "#" },
-    { name: "Teacher", link: "#" },
-    { name: "Staff & MLSS", dropdown: [
-      { name: "Staff", link: "#" },
-      { name: "MLSS", link: "#" }
-    ] },
-    { name: "Students", link: "#" },
-    { name: "Academic", dropdown: [
-      { name: "Admission", link: "#" },
-      { name: "Book List", link: "#" },
-      { name: "Dress", link: "#" },
-      { name: "Syllabus", link: "#" },
-      { name: "Class Routine", link: "#" },
-      { name: "Exam Routine", link: "#" }
-    ] },
-    { name: "Result", dropdown: [
-      { name: "School Result", link: "#" },
-      { name: "Board Result", link: "#" }
-    ] },
-    { name: "Publications", dropdown: [
-      { name: "Magazine", link: "#" },
-      { name: "Media News", link: "#" }
-    ] },
-    { name: "Gallery", dropdown: [
-      { name: "Photo Gallery", link: "#" },
-      { name: "Video Gallery", link: "#" }
-    ] },
-  ];
+ 
 
   const sliderImages = [
     { src: "/image/image1.jpg", alt: "Slide 1" },
@@ -97,7 +62,7 @@ export default function HomePage() {
       {/* Header + Navbar + Breaking News */}
       <Header />
      
-      <Navbar menuItems={menuItems} />
+      <Navbar />
       <BreakingNews newsItems={news} speed={100} />
 
       {/* Top Section Grid */}

@@ -6,17 +6,15 @@ import { useUser } from "../app/context/UserContext";
 
 const AuthButtons: React.FC = () => {
   const router = useRouter();
-  const { userType } = useUser(); 
+  const { userType } = useUser();
 
   const handleRegistration = () => {
     const routes: Record<string, string> = {
       student: "/registration/student",
       teacher: "/registration/teacher",
       parent: "/registration/parent",
-      
     };
 
-    // যদি userType না থাকে বা unknown হয়, default /registration এ যাবে
     router.push(routes[userType] || "/registration");
   };
 
@@ -28,17 +26,15 @@ const AuthButtons: React.FC = () => {
   `;
 
   return (
-    <div className="flex gap-3  md:gap-4 flex-1 justify-center md:justify-end">
-      {/* Registration Button */}
-    <Link href="/registration" >
-    <button onClick={handleRegistration} className={buttonClass}>
+    <div className="flex gap-3 md:gap-4 flex-1 justify-center md:justify-end">
+      {/* Registration Button → router.push দিয়ে dynamic */}
+      <button onClick={handleRegistration} className={buttonClass}>
         Registration
       </button>
 
-    </Link>
-      {/* Login Button */}
-      <Link href="/login">
-        <button className={buttonClass}>Login</button>
+      {/* Login Button → সরাসরি Link */}
+      <Link href="/login" className={buttonClass}>
+        Login
       </Link>
     </div>
   );

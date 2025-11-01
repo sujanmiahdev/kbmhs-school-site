@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+model Student {
+  id              Int      @id @default(autoincrement())
+  fullName        String   @map("full_name")
+  fatherName      String   @map("father_name")
+  motherName      String   @map("mother_name")
+  dob             DateTime
+  studentId       String   @unique @map("student_id")
+  phone           String
+  className       String   @map("class")
+  groupName       String   @map("group")
+  passingYear     Int      @map("passing_year")
+  bloodGroup      String?  @map("blood_group")
+  password        String
+  profilePicture  String?  @map("profile_picture")
+  createdAt       DateTime @default(now()) @map("created_at")
+}
+
+
+model Teacher {
+  id              Int      @id @default(autoincrement())
+  fullName        String
+  fatherName      String?
+  motherName      String?
+  dob             DateTime
+  gender          String
+  nid             String?
+  maritalStatus   String?
+  phone           String
+  email           String  @unique
+  presentAddress  String?
+  permanentAddress String?
+  degree          String?
+  subjectMajor    String?
+  institution     String?
+  passingYear     Int?
+  cgpa            String?
+  teacherId       String  @unique
+  designation     String?
+  department      String?
+  experience      String?
+  joiningDate     DateTime
+  skills          String?
+  publications    String?
+  bloodGroup      String?
+  emergencyName   String?
+  emergencyPhone  String?
+  username        String?
+  password        String
+  profilePicture  String?  // Base64 image string
+  createdAt       DateTime @default(now())
+}
+
+

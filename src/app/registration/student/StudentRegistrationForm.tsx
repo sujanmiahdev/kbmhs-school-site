@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -40,36 +40,32 @@ export default function StudentRegistrationForm() {
   const [selectedClass, setSelectedClass] = useState('');
   const [profileFile, setProfileFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [passingYear, setPassingYear] = useState('');
-  const [bloodGroup, setBloodGroup] = useState('');
+  const [years, setYears] = useState<number[]>([]);
 
   const {
     register,
     handleSubmit,
+    setValue,
+      
+      reset,
     formState: { errors, touchedFields },
   } = useForm<StudentForm>({
     resolver: zodResolver(studentSchema),
     mode: 'onChange',
   });
 
-  // Class -> Group mapping
-  const classGroups: Record<string, string[]> = {
-    '1': ['A', 'B'],
-    '2': ['A', 'B'],
-    '3': ['A', 'B'],
-    '4': ['A', 'B'],
-    '5': ['A', 'B'],
-    '6': ['A', 'B'],
-    '7': ['A', 'B'],
-    '8': ['A', 'B'],
-    '9': ['Science', 'Commerce', 'Arts'],
-    '10': ['Science', 'Commerce', 'Arts'],
-    '11': ['Science', 'Commerce', 'Arts'],
-    '12': ['Science', 'Commerce', 'Arts'],
-  };
+  // Populate years client-side to avoid hydration mismatch
+  useEffect(() => {
+    setYears(Array.from({ length: 50 }, (_, i) => new Date().getFullYear() - i));
+  }, []);
 
-  // --- Passing Year Options ---
-  const years = Array.from({ length: 50 }, (_, i) => new Date().getFullYear() - i);
+  // Watch selected class to update groups dynamically
+  const classGroups: Record<string, string[]> = {
+    '1': ['A', 'B'], '2': ['A', 'B'], '3': ['A', 'B'], '4': ['A', 'B'],
+    '5': ['A', 'B'], '6': ['A', 'B'], '7': ['A', 'B'], '8': ['A', 'B'],
+    '9': ['Science', 'Commerce', 'Arts'], '10': ['Science', 'Commerce', 'Arts'],
+    '11': ['Science', 'Commerce', 'Arts'], '12': ['Science', 'Commerce', 'Arts'],
+  };
   const groups = selectedClass ? classGroups[selectedClass] : [];
 
   const handleFileChange = (file: File) => {
@@ -79,9 +75,31 @@ export default function StudentRegistrationForm() {
     reader.readAsDataURL(file);
   };
 
-  const handleSubmitForm = (data: StudentForm) => {
-    console.log('Form submitted:', { ...data, profileFile, passingYear, bloodGroup });
-    alert('Form submitted! Check console for data.');
+  const handleSubmitForm = async (data: StudentForm) => {
+    try {
+      const payload = {
+        ...data,
+       profilePicture: previewUrl, // base64 string
+      };
+
+      const res = await fetch("/api/student/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await res.json();
+
+      if (result.success) {
+        alert("Student registered successfully!");
+        router.push("/"); // Change to success page if needed
+      } else {
+        alert("Error: " + result.error);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong!");
+    }
   };
 
   const InputStatusIcon = ({ fieldName }: { fieldName: keyof StudentForm }) => {
@@ -95,9 +113,22 @@ export default function StudentRegistrationForm() {
 
   const inputClass = 'mt-1 w-full border p-2 rounded-lg h-11';
 
+   const handleReset = () => {
+  const confirmClear = confirm("Are you sure you want to clear all fields?");
+  if (!confirmClear) return;
+
+  reset(); // All Form Reset
+  setSelectedClass('');
+  setPreviewUrl(null);
+  setProfileFile(null);
+    
+};
+
+
+
+
   return (
     <div className="relative max-w-4xl mx-auto p-4">
-      {/* Back Button */}
       <button
         type="button"
         onClick={() => router.back()}
@@ -109,8 +140,7 @@ export default function StudentRegistrationForm() {
 
       <form onSubmit={handleSubmit(handleSubmitForm)} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-          {/* Row 1: Full Name | Father’s Name */}
+          {/* Full Name */}
           <label className="flex flex-col relative">
             <span className="text-sm font-medium text-slate-700">Full Name *</span>
             <input {...register('fullName')} placeholder="Enter full name" className="mt-1 w-full border p-2 rounded-lg h-11 pr-8" />
@@ -118,6 +148,7 @@ export default function StudentRegistrationForm() {
             {errors.fullName && <span className="text-red-600 text-sm">{errors.fullName.message}</span>}
           </label>
 
+          {/* Father Name */}
           <label className="flex flex-col relative">
             <span className="text-sm font-medium text-slate-700">Father's Name *</span>
             <input {...register('fatherName')} placeholder="Enter father's name" className="mt-1 w-full border p-2 rounded-lg h-11 pr-8" />
@@ -125,7 +156,7 @@ export default function StudentRegistrationForm() {
             {errors.fatherName && <span className="text-red-600 text-sm">{errors.fatherName.message}</span>}
           </label>
 
-          {/* Row 2: Mother’s Name | DOB */}
+          {/* Mother Name */}
           <label className="flex flex-col relative">
             <span className="text-sm font-medium text-slate-700">Mother's Name *</span>
             <input {...register('motherName')} placeholder="Enter mother's name" className="mt-1 w-full border p-2 rounded-lg h-11 pr-8" />
@@ -133,6 +164,7 @@ export default function StudentRegistrationForm() {
             {errors.motherName && <span className="text-red-600 text-sm">{errors.motherName.message}</span>}
           </label>
 
+          {/* DOB */}
           <label className="flex flex-col relative">
             <span className="text-sm font-medium text-slate-700">Date of Birth *</span>
             <input type="date" {...register('dob')} className="mt-1 w-full border p-2 rounded-lg h-11 pr-8" />
@@ -140,7 +172,7 @@ export default function StudentRegistrationForm() {
             {errors.dob && <span className="text-red-600 text-sm">{errors.dob.message}</span>}
           </label>
 
-          {/* Row 3: Mobile Number | Student ID */}
+          {/* Phone */}
           <label className="flex flex-col relative">
             <span className="text-sm font-medium text-slate-700">Mobile Number *</span>
             <input {...register('phone')} placeholder="01XXXXXXXXX" className="mt-1 w-full border p-2 rounded-lg h-11 pr-8" />
@@ -148,6 +180,7 @@ export default function StudentRegistrationForm() {
             {errors.phone && <span className="text-red-600 text-sm">{errors.phone.message}</span>}
           </label>
 
+          {/* Student ID */}
           <label className="flex flex-col relative">
             <span className="text-sm font-medium text-slate-700">Student ID / Roll *</span>
             <input {...register('studentId')} placeholder="Enter student ID" className="mt-1 w-full border p-2 rounded-lg h-11 pr-8" />
@@ -155,17 +188,21 @@ export default function StudentRegistrationForm() {
             {errors.studentId && <span className="text-red-600 text-sm">{errors.studentId.message}</span>}
           </label>
 
-          {/* Row 4: Class | Group */}
+          {/* Class */}
           <label className="flex flex-col relative">
             <span className="text-sm font-medium text-slate-700">Class *</span>
             <select
               {...register('class')}
               value={selectedClass}
-              onChange={(e) => setSelectedClass(e.target.value)}
+              onChange={(e) => {
+                setSelectedClass(e.target.value);
+                setValue('class', e.target.value); // Update react-hook-form
+                setValue('group', ''); // Reset group
+              }}
               className="mt-1 w-full border p-2 rounded-lg h-11 pr-8"
             >
               <option value="">Select Class</option>
-              {Array.from({ length: 12 }, (_, i) => i + 1).map((c) => (
+              {Array.from({ length: 12 }, (_, i) => (i + 1).toString()).map((c) => (
                 <option key={c} value={c}>{c}</option>
               ))}
             </select>
@@ -173,6 +210,7 @@ export default function StudentRegistrationForm() {
             {errors.class && <span className="text-red-600 text-sm">{errors.class.message}</span>}
           </label>
 
+          {/* Group */}
           <label className="flex flex-col relative">
             <span className="text-sm font-medium text-slate-700">Group *</span>
             <div className="relative">
@@ -186,41 +224,42 @@ export default function StudentRegistrationForm() {
             {errors.group && <span className="text-red-600 text-sm">{errors.group.message}</span>}
           </label>
 
-          {/* Row 5: Passing year | Blood group */}
+          {/* Passing Year */}
           <label className="flex flex-col">
             <span className="text-sm font-medium text-slate-700">Passing Year *</span>
             <select
-              value={passingYear}
-              onChange={(e) => setPassingYear(e.target.value)}
-              className={inputClass}
+              {...register('passingYear')}
+              className={inputClass + ' appearance-none'}
             >
               <option value="">Select Passing Year</option>
-              {years.map((y) => <option key={y} value={y}>{y}</option>)}
+              {years.map((y) => (
+                <option key={y} value={y}>{y}</option>
+              ))}
             </select>
-            {errors.passingYear && <span className="text-red-600 text-sm">{errors.passingYear.message}</span>}
+            {errors?.passingYear && <span className="text-red-600 text-sm">{errors.passingYear.message}</span>}
           </label>
 
+          {/* Blood Group */}
           <label className="flex flex-col">
-  <span className="text-sm font-medium text-slate-700">Blood Group *</span>
-  <select
-    value={bloodGroup}
-    onChange={(e) => setBloodGroup(e.target.value)}
-    className={inputClass}
-  >
-    <option value="">Select Blood Group</option>
-    <option value="A+">A+</option>
-    <option value="A-">A-</option>
-    <option value="B+">B+</option>
-    <option value="B-">B-</option>
-    <option value="O+">O+</option>
-    <option value="O-">O-</option>
-    <option value="AB+">AB+</option>
-    <option value="AB-">AB-</option>
-  </select>
-  {errors.bloodGroup && <span className="text-red-600 text-sm">{errors.bloodGroup.message}</span>}
-</label>
+            <span className="text-sm font-medium text-slate-700">Blood Group</span>
+            <select
+              {...register('bloodGroup')}
+              className={inputClass}
+            >
+              <option value="">Select Blood Group</option>
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+            </select>
+            {errors.bloodGroup && <span className="text-red-600 text-sm">{errors.bloodGroup.message}</span>}
+          </label>
 
-          {/* Row 6: Password | Confirm Password */}
+          {/* Password */}
           <label className="flex flex-col relative">
             <span className="text-sm font-medium text-slate-700">Password *</span>
             <input type="password" {...register('password')} placeholder="Enter password" className="mt-1 w-full border p-2 rounded-lg h-11 pr-8" />
@@ -228,6 +267,7 @@ export default function StudentRegistrationForm() {
             {errors.password && <span className="text-red-600 text-sm">{errors.password.message}</span>}
           </label>
 
+          {/* Confirm Password */}
           <label className="flex flex-col relative">
             <span className="text-sm font-medium text-slate-700">Confirm Password *</span>
             <input type="password" {...register('confirmPassword')} placeholder="Confirm password" className="mt-1 w-full border p-2 rounded-lg h-11 pr-8" />
@@ -253,6 +293,17 @@ export default function StudentRegistrationForm() {
         <button type="submit" className="mt-6 w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700">
           Register
         </button>
+{/* Clear All button */}
+    <div className="flex justify-center ">
+          <button
+            type="button"
+            onClick={handleReset} 
+            className=" px-5  py-3 rounded-lg text-white bg-red-400 border border-gray-300 hover:bg-red-600 transition"
+          >
+            Clear All
+          </button>
+  </div>
+          
       </form>
     </div>
   );

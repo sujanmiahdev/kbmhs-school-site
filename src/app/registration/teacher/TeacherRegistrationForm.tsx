@@ -36,8 +36,7 @@ export default function TeacherRegistrationForm() {
   const [emergencyName, setEmergencyName] = useState('');
   const [emergencyPhone, setEmergencyPhone] = useState('');
   const [profileFile, setProfileFile] = useState<File | null>(null);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
@@ -48,6 +47,17 @@ export default function TeacherRegistrationForm() {
 
   // --- Passing Year Options ---
   const years = Array.from({ length: 50 }, (_, i) => new Date().getFullYear() - i);
+ 
+  //  Convert image to base64
+ const convertToBase64 = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = reject;
+  });
+};
+
 
   // --- Handlers ---
   const handleSubmit = async (e: React.FormEvent) => {
@@ -96,6 +106,13 @@ export default function TeacherRegistrationForm() {
     setLoading(true);
 
     try {
+       let base64Image: string | null = null
+    if (profileFile) {
+      base64Image = await convertToBase64(profileFile)
+    }
+
+   
+  
       const payload = {
         basic: { fullName, fatherName, motherName, dob, gender, nid, maritalStatus },
         contact: { phone, email, presentAddress, permanentAddress },
@@ -107,27 +124,34 @@ export default function TeacherRegistrationForm() {
           bloodGroup,
           emergencyContact: { name: emergencyName, phone: emergencyPhone },
         },
-        credentials: { username: username || email, password },
-        profilePicture: profileFile,
+        credentials: { email, password },
+        profilePicture:base64Image,
       };
 
-      const res = await fetch('/api/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
+      //  API call
+   const res = await fetch('/api/teacher/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    })
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data?.error || 'Registration failed');
+    const result = await res.json()
 
-      setMessage('Registration successful. You can now login.');
-      setErrors({});
-    } catch (err: any) {
-      setError(err.message || 'Something went wrong');
-    } finally {
-      setLoading(false);
+    if (result.success) {
+      alert('✅ Teacher registered successfully!')
+      setMessage('Teacher successfully added.')
+      setErrors({})
+      
+    } else {
+      alert(`❌ Error: ${result.error}`)
     }
-  };
+  } catch (err: any) {
+    console.error(err)
+    setErrors({ general: err.message })
+  } finally {
+    setLoading(false)
+  }
+}
 
   const handleProfileClick = () => fileInputRef.current?.click();
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
@@ -275,9 +299,22 @@ export default function TeacherRegistrationForm() {
               {errors.passingYear && <span className="text-red-600 text-sm">{errors.passingYear}</span>}
             </label>
 
+           {/* Blood Group */}
+          {/* Blood Group */}
             <label className="flex flex-col">
               <span className="text-sm font-medium text-slate-700">Blood Group</span>
-              <input value={bloodGroup} onChange={e => setBloodGroup(e.target.value)} className={inputClass} />
+              <select value={bloodGroup} onChange={e => setBloodGroup(e.target.value)} className={inputClass}>
+                <option value="">Select Blood Group</option>
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+              </select>
+              {errors.bloodGroup && <span className="text-red-600 text-sm">{errors.bloodGroup}</span>}
             </label>
 
             <label className="flex flex-col">

@@ -6,6 +6,10 @@ import { motion } from "framer-motion";
 import TeacherRegistrationForm from "@/app/registration/teacher/TeacherRegistrationForm";
 import StudentRegistrationForm from "@/app/registration/student/StudentRegistrationForm";
 import ParentRegistrationForm from "@/app/registration/parent/ParentRegistrationForm";
+import StaffRegistrationForm from '@/app/registration/staff/StaffRegistrationForm';
+
+import Header from "@/components/Header";
+import SchoolFooter from "@/components/SchoolFooter";
 
 export default function RegistrationSelector() {
   const [role, setRole] = useState("");
@@ -17,12 +21,18 @@ export default function RegistrationSelector() {
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-start bg-gray-100 dark:bg-gray-900 p-4">
+    <> 
+    <div className="shadow-sm ">
+<Header/>
+    </div>
+    <div className="min-h-screen w-full flex flex-col items-center justify-start bg-gray-300 dark:bg-gray-900  pb-4 mt-0">
+      
+      
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="w-full max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl 2xl:max-w-4xl bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8 transition-colors duration-500 mt-12"
+        className="w-full max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl 2xl:max-w-4xl bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8 transition-colors duration-500 mt-3"
       >
         <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white text-center mb-8">
           Register
@@ -38,7 +48,8 @@ export default function RegistrationSelector() {
             <option value="" disabled hidden></option>
             <option value="student">Student</option>
             <option value="teacher">Teacher</option>
-            <option value="parent">Parent</option>
+            <option value="staff">Staff</option>
+            <option value="parent">Guardian</option>
             
           </select>
 
@@ -61,9 +72,8 @@ export default function RegistrationSelector() {
           </div>
         </div>
 
-        {/* Go Button */}
-        
-      </motion.div>
+        </motion.div>
+
   {/* Student Registration Form Wide */}
    {role === "student" && (
         <motion.div
@@ -96,6 +106,23 @@ export default function RegistrationSelector() {
         </motion.div>
       )}
 
+       {/* Staff Registration Form Wide */}
+      {role === "staff" && (
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="w-full max-w-4xl mt-2 p-8 bg-white dark:bg-gray-800 rounded-2xl shadow-lg transition-colors duration-500"
+        >
+          <h1 className="text-2xl text-center font-semibold mb-4 ">Staff Registration</h1>
+          <p className="text-sm text-center text-slate-600 mb-6">
+            Create an account to access the Staff dashboard.
+          </p>
+          <StaffRegistrationForm />
+        </motion.div>
+      )}
+
+
        {/* parent Registration Form Wide */}
       {role === "parent" && (
         <motion.div
@@ -104,15 +131,22 @@ export default function RegistrationSelector() {
           transition={{ duration: 0.6 }}
           className="w-full max-w-4xl mt-2 p-8 bg-white dark:bg-gray-800 rounded-2xl shadow-lg transition-colors duration-500"
         >
-          <h1 className="text-2xl text-center font-semibold mb-4 ">parent Registration</h1>
+          <h1 className="text-2xl text-center font-semibold mb-4 ">Guardian Registration</h1>
           <p className="text-sm text-center text-slate-600 mb-6">
-            Create an account to access the parent dashboard.
+            Create an account to access the guardian dashboard.
           </p>
           <ParentRegistrationForm />
         </motion.div>
       )}
 
 
+
     </div>
+
+{/* Footer components */}
+    <div>
+     <SchoolFooter/>
+    </div>
+    </>
   );
 }

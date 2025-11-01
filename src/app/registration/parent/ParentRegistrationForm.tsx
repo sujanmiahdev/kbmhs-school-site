@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowLeft, CheckCircle2, AlertCircle, ChevronDown } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
-// Zod Schema for Parent
+// ✅ Zod Schema for Parent
 const parentSchema = z
   .object({
     fullName: z.string().min(1, 'Full Name is required'),
@@ -21,7 +21,7 @@ const parentSchema = z
     studentFullName: z.string().min(1, 'Student full name is required'),
     studentId: z.string().min(1, 'Student ID/Roll is required'),
     studentClass: z.string().min(1, 'Class is required'),
-    section: z.string().min(1, 'Section/Group is required'),
+    group: z.string().min(1, 'Section/Group is required'),
     session: z.string().min(1, 'Session is required'),
     password: z.string().min(6, 'Password must be at least 6 characters'),
     confirmPassword: z.string().min(1, 'Confirm Password is required'),
@@ -39,6 +39,22 @@ export default function ParentRegistrationForm() {
   const [profileFile, setProfileFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
+  // ✅ Class -> Group mapping
+  const classGroups: Record<string, string[]> = {
+    '1': ['A', 'B'],
+    '2': ['A', 'B'],
+    '3': ['A', 'B'],
+    '4': ['A', 'B'],
+    '5': ['A', 'B'],
+    '6': ['A', 'B'],
+    '7': ['A', 'B'],
+    '8': ['A', 'B'],
+    '9': ['Science', 'Commerce', 'Arts'],
+    '10': ['Science', 'Commerce', 'Arts'],
+    '11': ['Science', 'Commerce', 'Arts'],
+    '12': ['Science', 'Commerce', 'Arts'],
+  };
+
   const {
     register,
     handleSubmit,
@@ -48,6 +64,10 @@ export default function ParentRegistrationForm() {
     resolver: zodResolver(parentSchema),
     mode: 'onChange',
   });
+
+  // ✅ Watch selected class
+  const selectedClass = watch('studentClass');
+  const groups = selectedClass ? classGroups[selectedClass] || [] : [];
 
   const handleFileChange = (file: File) => {
     setProfileFile(file);
@@ -139,32 +159,59 @@ export default function ParentRegistrationForm() {
           {/* Row 4: Student ID | Class */}
           <label className="flex flex-col relative">
             <span className="text-sm font-medium text-slate-700">Student ID / Roll *</span>
-            <input {...register('studentId')} placeholder="Enter student ID/roll" className={inputClass + ' pr-8'} />
+            <input {...register('studentId')} placeholder="Enter student ID/Roll" className={inputClass + ' pr-8'} />
             <InputStatusIcon fieldName="studentId" />
             {errors.studentId && <span className="text-red-600 text-sm">{errors.studentId.message}</span>}
           </label>
 
           <label className="flex flex-col relative">
             <span className="text-sm font-medium text-slate-700">Class *</span>
-            <input {...register('studentClass')} placeholder="Enter class" className={inputClass + ' pr-8'} />
+            <select
+              {...register('studentClass')}
+              className="mt-1 w-full border p-2 rounded-lg h-11 pr-8"
+            >
+              <option value="">Select Class</option>
+              {Array.from({ length: 12 }, (_, i) => i + 1).map((c) => (
+                <option key={c} value={c}>{c}</option>
+              ))}
+            </select>
             <InputStatusIcon fieldName="studentClass" />
             {errors.studentClass && <span className="text-red-600 text-sm">{errors.studentClass.message}</span>}
           </label>
 
           {/* Row 5: Section/Group | Session */}
           <label className="flex flex-col relative">
-            <span className="text-sm font-medium text-slate-700">Section/Group *</span>
-            <input {...register('section')} placeholder="Enter section/group" className={inputClass + ' pr-8'} />
-            <InputStatusIcon fieldName="section" />
-            {errors.section && <span className="text-red-600 text-sm">{errors.section.message}</span>}
+            <span className="text-sm font-medium text-slate-700">Group *</span>
+            <div className="relative">
+              <select {...register('group')} className="mt-1 w-full border p-2 rounded-lg h-11 pr-8 appearance-none">
+                <option value="">Select Group</option>
+                {groups.map((g) => (
+                  <option key={g} value={g}>{g}</option>
+                ))}
+              </select>
+              <ChevronDown className="absolute right-3 top-3 w-5 h-5 pointer-events-none text-gray-500" />
+            </div>
+            <InputStatusIcon fieldName="group" />
+            {errors.group && <span className="text-red-600 text-sm">{errors.group.message}</span>}
           </label>
 
           <label className="flex flex-col relative">
-            <span className="text-sm font-medium text-slate-700">Session *</span>
-            <input {...register('session')} placeholder="Enter session" className={inputClass + ' pr-8'} />
-            <InputStatusIcon fieldName="session" />
-            {errors.session && <span className="text-red-600 text-sm">{errors.session.message}</span>}
-          </label>
+  <span className="text-sm font-medium text-slate-700">Session *</span>
+  <div className="relative">
+    <select
+      {...register('session')}
+      className="mt-1 w-full border p-2 rounded-lg h-11 pr-8 appearance-none"
+    >
+      <option value="">Select Year</option>
+      {Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - i).map((year) => (
+        <option key={year} value={year}>{year}</option>
+      ))}
+    </select>
+    <ChevronDown className="absolute right-3 top-3 w-5 h-5 pointer-events-none text-gray-500" />
+  </div>
+  <InputStatusIcon fieldName="session" />
+  {errors.session && <span className="text-red-600 text-sm">{errors.session.message}</span>}
+</label>
 
           {/* Row 6: Password | Confirm Password */}
           <label className="flex flex-col relative">
@@ -181,7 +228,7 @@ export default function ParentRegistrationForm() {
             {errors.confirmPassword && <span className="text-red-600 text-sm">{errors.confirmPassword.message}</span>}
           </label>
 
-          {/* Row 7: Profile Picture (full width) */}
+          {/* Row 7: Profile Picture */}
           <div className="col-span-1 md:col-span-2">
             <span className="text-sm font-medium text-slate-700">Profile Picture</span>
             <div

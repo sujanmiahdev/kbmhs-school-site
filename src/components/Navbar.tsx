@@ -6,14 +6,66 @@ import { usePathname } from "next/navigation";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
+// Menu Items kept inside Navbar
+const menuItems = [
+  { name: "Home", link: "/" },
+  {
+    name: "Institute",
+    dropdown: [
+      { name: "Welcome Speech", link: "/welcome-speech" },
+      { name: "Institute Details", link: "/institute-details" },
+      { name: "Governing Body", link: "/navbar/governing-body" },
+      { name: "Director General", link: "/director-general" },
+    ],
+  },
+  { name: "Administration", link: "/administration" },
+  { name: "Teacher", link: "/teacher-list" },
+  {
+    name: "Staff & MLSS",
+    dropdown: [
+      { name: "Staff", link: "/staff" },
+      { name: "MLSS", link: "#" },
+    ],
+  },
+  { name: "Students", link: "/student-info" },
+  {
+    name: "Academic",
+    dropdown: [
+      { name: "Admission", link: "#" },
+      { name: "Book List", link: "#" },
+      { name: "Dress", link: "#" },
+      { name: "Syllabus", link: "#" },
+      { name: "Class Routine", link: "#" },
+      { name: "Exam Routine", link: "#" },
+    ],
+  },
+  {
+    name: "Result",
+    dropdown: [
+      { name: "School Result", link: "/school-result" },
+      { name: "Board Result", link: "#" },
+    ],
+  },
+  {
+    name: "Publications",
+    dropdown: [
+      { name: "Magazine", link: "#" },
+      { name: "Media News", link: "#" },
+    ],
+  },
+  {
+    name: "Gallery",
+    dropdown: [
+      { name: "Photo Gallery", link: "/photo-gallery" },
+      { name: "Video Gallery", link: "/video-gallery" },
+    ],
+  },
+];
+
 // Animation Variants
 const dropdownVariants = {
   hidden: { opacity: 0, y: -10 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { staggerChildren: 0.08, duration: 0.3 },
-  },
+  visible: { opacity: 1, y: 0, transition: { staggerChildren: 0.08, duration: 0.3 } },
   exit: { opacity: 0, y: -10, transition: { duration: 0.2 } },
 };
 
@@ -23,20 +75,9 @@ const itemVariants = {
   exit: { opacity: 0, y: -5, transition: { duration: 0.2 } },
 };
 
-interface MenuItem {
-  name: string;
-  link?: string;
-  dropdown?: { name: string; link?: string }[];
-}
-
-interface NavbarProps {
-  menuItems: MenuItem[];
-}
-
-export default function Navbar({ menuItems }: NavbarProps) {
+export default function Navbar() {
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
-
   const pathname = usePathname();
 
   const toggleDropdown = (index: number) => {
@@ -48,7 +89,13 @@ export default function Navbar({ menuItems }: NavbarProps) {
       {/* Desktop Navbar */}
       <ul className="hidden md:flex justify-center items-center gap-2 py-3 text-white font-medium">
         {menuItems.map((item, i) => {
-          const isActive = item.link && pathname === item.link;
+          // Parent active check (child active included)
+          const isParentActive = item.link
+            ? pathname === item.link
+            : item.dropdown
+            ? item.dropdown.some(sub => sub.link === pathname)
+            : false;
+
           return (
             <li
               key={i}
@@ -56,18 +103,19 @@ export default function Navbar({ menuItems }: NavbarProps) {
               onMouseEnter={() => item.dropdown && setOpenDropdown(i)}
               onMouseLeave={() => item.dropdown && setOpenDropdown(null)}
             >
-              {item.link ? (
+              {item.link || !item.dropdown ? (
                 <Link
-                  href={item.link}
+                  href={item.link || "#"}
                   className={`px-3 py-2 rounded-lg transition flex items-center gap-1 cursor-pointer 
-                    ${isActive ? "bg-green-600" : "hover:bg-green-600"}`}
+                    ${isParentActive ? "bg-green-600" : "hover:bg-green-600"}`}
                 >
                   {item.name}
                 </Link>
               ) : (
                 <button
                   onClick={() => item.dropdown && toggleDropdown(i)}
-                  className="px-3 py-2 rounded-lg hover:bg-green-600 transition flex items-center gap-1 cursor-pointer"
+                  className={`px-3 py-2 rounded-lg transition flex items-center gap-1 cursor-pointer
+                    ${isParentActive ? "bg-green-600" : "hover:bg-green-600"}`}
                 >
                   {item.name}
                   {item.dropdown &&
@@ -79,7 +127,7 @@ export default function Navbar({ menuItems }: NavbarProps) {
                 </button>
               )}
 
-              {/* Dropdown with Animation */}
+              {/* Dropdown */}
               <AnimatePresence>
                 {item.dropdown && openDropdown === i && (
                   <motion.ul
@@ -90,12 +138,12 @@ export default function Navbar({ menuItems }: NavbarProps) {
                     className="absolute left-0 top-full mt-1 bg-blue-900 rounded-lg shadow-lg min-w-[150px] overflow-hidden"
                   >
                     {item.dropdown.map((sub, idx) => {
-                      const isSubActive = sub.link && pathname === sub.link;
+                      const isSubActive = sub.link === pathname;
                       return (
                         <motion.li key={idx} variants={itemVariants}>
                           <Link
                             href={sub.link || "#"}
-                            className={`block px-4 py-2 rounded-lg cursor-pointer 
+                            className={`block px-4 py-2 rounded-lg cursor-pointer
                               ${isSubActive ? "bg-green-600" : "hover:bg-green-600"}`}
                           >
                             {sub.name}
@@ -129,21 +177,27 @@ export default function Navbar({ menuItems }: NavbarProps) {
             className="md:hidden flex flex-col gap-2 px-4 py-3 text-white font-medium bg-blue-900"
           >
             {menuItems.map((item, i) => {
-              const isActive = item.link && pathname === item.link;
+              const isParentActive = item.link
+                ? pathname === item.link
+                : item.dropdown
+                ? item.dropdown.some(sub => sub.link === pathname)
+                : false;
+
               return (
                 <li key={i} className="flex flex-col">
-                  {item.link ? (
+                  {item.link || !item.dropdown ? (
                     <Link
-                      href={item.link}
-                      className={`w-full text-left px-3 py-2 rounded-lg transition flex items-center justify-between cursor-pointer 
-                        ${isActive ? "bg-green-600" : "hover:bg-green-600"}`}
+                      href={item.link || "#"}
+                      className={`w-full text-left px-3 py-2 rounded-lg transition flex items-center justify-between cursor-pointer
+                        ${isParentActive ? "bg-green-600" : "hover:bg-green-600"}`}
                     >
                       {item.name}
                     </Link>
                   ) : (
                     <button
                       onClick={() => item.dropdown && toggleDropdown(i)}
-                      className="w-full text-left px-3 py-2 rounded-lg hover:bg-green-600 transition flex items-center justify-between cursor-pointer"
+                      className={`w-full text-left px-3 py-2 rounded-lg transition flex items-center justify-between cursor-pointer
+                        ${isParentActive ? "bg-green-600" : "hover:bg-green-600"}`}
                     >
                       {item.name}
                       {item.dropdown &&
@@ -155,7 +209,7 @@ export default function Navbar({ menuItems }: NavbarProps) {
                     </button>
                   )}
 
-                  {/* Mobile Dropdown Animation */}
+                  {/* Mobile Dropdown */}
                   <AnimatePresence>
                     {item.dropdown && openDropdown === i && (
                       <motion.ul
@@ -166,12 +220,12 @@ export default function Navbar({ menuItems }: NavbarProps) {
                         className="pl-6 space-y-1 overflow-hidden"
                       >
                         {item.dropdown.map((sub, idx) => {
-                          const isSubActive = sub.link && pathname === sub.link;
+                          const isSubActive = sub.link === pathname;
                           return (
                             <motion.li key={idx} variants={itemVariants}>
                               <Link
                                 href={sub.link || "#"}
-                                className={`block px-3 py-1 rounded-lg cursor-pointer 
+                                className={`block px-3 py-1 rounded-lg cursor-pointer
                                   ${isSubActive ? "bg-green-600" : "hover:bg-green-600"}`}
                               >
                                 {sub.name}
