@@ -6,7 +6,7 @@ import { useUser } from "../app/context/UserContext";
 
 const AuthButtons: React.FC = () => {
   const router = useRouter();
-  const { userType } = useUser();
+ const { user } = useUser();
 
   const handleRegistration = () => {
     const routes: Record<string, string> = {
@@ -15,7 +15,7 @@ const AuthButtons: React.FC = () => {
       parent: "/registration/parent",
     };
 
-    router.push(routes[userType] || "/registration");
+   router.push(routes[user || ""] || "/registration");
   };
 
   const buttonClass = `

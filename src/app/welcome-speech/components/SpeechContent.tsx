@@ -46,9 +46,9 @@ const SpeechContent = () => (
 
     <p className="mt-6 font-semibold">
       With best wishes,<br />
-      [Name of Head Teacher]<br />
+      MD SOLIM UDDIN<br />
       Head Teacher<br />
-      [Name of School & College]
+      Kumulli Bachchu Mia Model High School
     </p>
   </motion.div>
 );

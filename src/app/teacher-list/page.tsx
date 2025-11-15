@@ -3,6 +3,7 @@ import TeacherList from './components/TeacherList';
 
 import Navbar from '@/components/Navbar';
 import RoutingHeader from '@/components/RoutingHeader';
+import SchoolFooter from '@/components/SchoolFooter';
 
 
 
@@ -14,8 +15,11 @@ const TeachersPage = () => {
         <RoutingHeader />
         <Navbar />
       </div>
+{/* Teacher page */}
+ <TeacherList />
 
-  <TeacherList />
+{/* Footer */}
+<SchoolFooter/>
   </>
   )
 };

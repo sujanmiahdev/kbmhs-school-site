@@ -7,22 +7,22 @@ const staffList = [
   {
     name: 'MD. SHAHAJAN ISLAM',
     role: 'Accountant (Addl. Charge)',
-    image: '/images/staff/shahajan.jpg',
+    image: '/image/staff1.jpg',
   },
   {
     name: 'SHARMIN NAHAR',
     role: 'Office Assistant',
-    image: '/images/staff/sharmin.jpg',
+    image: '/image/staff2.jpg',
   },
   {
     name: 'RUKSHANA PARVIN',
     role: 'Supervisor',
-    image: '/images/staff/rukshana.jpg',
+    image: '/image/staff3.jpg',
   },
   {
-    name: 'MD. SHAHIDUL ISLAM',
+    name: 'MD. SHOFIQUL ISLAM',
     role: 'Lower Division Clerk (LDC)',
-    image: '/images/staff/shahidul.jpg',
+    image: '/image/staff4.jpg',
   },
   {
     name: 'MD. ASRAFUL ISLAM',
@@ -68,10 +68,14 @@ const staffList = [
 
 export default function StaffPage() {
   return (
-    <section className="py-12 px-6 bg-gray-50 min-h-screen">
-      <h1 className="text-3xl font-bold text-center mb-10 text-blue-700">
+    <section className="py-8 px-6 bg-gray-50 min-h-screen">
+      <h1 className="text-3xl font-bold text-center mb-7 text-blue-700">
         Non-Teaching Staff
       </h1>
+      <p className="text-center text-gray-600 max-w-2xl mx-auto mb-4">
+  Meet our dedicated administrative and support staff who ensure smooth operations across the institution.
+</p>
+
 
       <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {staffList.map((staff, index) => (
@@ -80,12 +84,12 @@ export default function StaffPage() {
             whileHover={{ scale: 1.05 }}
             className="bg-white rounded-2xl shadow-md p-4 text-center hover:shadow-lg transition"
           >
-            <div className="w-32 h-32 mx-auto rounded-full overflow-hidden border-4 border-blue-100 shadow-sm">
+            <div className="w-32 h-32 mx-auto  overflow-hidden border-4 border-blue-100 rounded-xl shadow-sm">
               <Image
                 src={staff.image}
                 alt={staff.name}
-                width={150}
-                height={150}
+                width={170}
+                height={170}
                 className="object-cover w-full h-full"
               />
             </div>

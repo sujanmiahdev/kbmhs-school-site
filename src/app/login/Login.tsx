@@ -116,7 +116,7 @@ const Login = () => {
           type="submit"
           className="w-full bg-blue-500 text-white p-2 rounded hover:bg-green-600"
         >
-          Login
+         <a href="/dashboard/student-dashboad">Login</a> 
         </button>
 
         {/* Forgotten password link - Centered */}

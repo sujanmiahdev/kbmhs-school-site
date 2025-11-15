@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+import { X, ChevronLeft, ChevronRight } from 'lucide-react'; // সুন্দর আইকন যোগ করা
 
 type Photo = {
   id: string;
@@ -84,26 +85,28 @@ export default function PhotoGallery() {
             className="max-w-4xl w-full relative"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Close button */}
-            <button
-              onClick={() => setOpenIndex(null)}
-              className="absolute top-3 right-3 z-10 rounded-full bg-white/90 p-2 hover:bg-white transition"
-              aria-label="Close"
-            >
-              ✕
-            </button>
+            {/* Close button (X icon) */}
+           <button
+  onClick={() => setOpenIndex(null)}
+  className="absolute top-3 right-3 z-10 bg-white text-gray-800 rounded-full p-2 shadow-lg transition-colors duration-300 hover:bg-red-600 hover:text-white"
+  aria-label="Close"
+>
+  <X className="w-5 h-5" />
+</button>
 
-            {/* Large Image */}
-            <div className="w-full aspect-[4/3] relative rounded overflow-hidden shadow-lg">
-              <Image
-                src={photos[openIndex].src}
-                alt={photos[openIndex].alt}
-                fill
-                sizes="(max-width: 1024px) 90vw, 800px"
-                style={{ objectFit: 'contain' }}
-                priority
-              />
-            </div>
+{/* Large Image */}
+<div className="relative w-full flex justify-center items-center rounded-2xl overflow-hidden shadow-2xl bg-black max-h-[85vh]">
+  <Image
+    src={photos[openIndex].src}
+    alt={photos[openIndex].alt}
+    width={1200}
+    height={800}
+    className="object-contain w-full h-auto rounded-2xl"
+    priority
+  />
+</div>
+
+
 
             {/* Caption */}
             {photos[openIndex].caption && (
@@ -122,10 +125,10 @@ export default function PhotoGallery() {
                       : (idx - 1 + photos.length) % photos.length
                 )
               }
-              className="absolute inset-y-0 left-3 flex items-center text-4xl text-white/70 hover:text-white transition"
+              className="absolute top-1/2 left-4 -translate-y-1/2 bg-white/20 hover:bg-gray-600 rounded-full p-2 text-white transition"
               aria-label="Previous"
             >
-              ‹
+              <ChevronLeft className="w-6 h-6" />
             </button>
 
             <button
@@ -135,10 +138,10 @@ export default function PhotoGallery() {
                     idx === null ? null : (idx + 1) % photos.length
                 )
               }
-              className="absolute inset-y-0 right-3 flex items-center text-4xl text-white/70 hover:text-white transition"
+              className="absolute top-1/2 right-4 -translate-y-1/2 bg-white/20  hover:bg-gray-600 rounded-full p-2 text-white transition"
               aria-label="Next"
             >
-              ›
+              <ChevronRight className="w-6 h-6" />
             </button>
           </div>
         </div>

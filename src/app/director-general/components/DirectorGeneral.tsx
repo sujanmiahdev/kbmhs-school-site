@@ -4,14 +4,14 @@ import Image from 'next/image';
 
 export default function DirectorGeneralPage() {
   return (
-    <section className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 py-14 px-6">
+    <section className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 py-8 pb-10 px-6">
       <div className="max-w-5xl mx-auto">
         {/* --- Header / Hero --- */}
         <div className="text-center mb-4">
           <h1 className="text-4xl font-bold text-blue-700 mb-2">
             Director General
           </h1>
-          <p className="text-gray-600 mb-6">
+          <p className="text-gray-600 mb-3">
             Leading with vision, inspiring excellence
           </p>
           <div className="w-24 h-1 bg-blue-600 mx-auto rounded-full"></div>

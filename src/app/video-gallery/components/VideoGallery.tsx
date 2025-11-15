@@ -93,9 +93,9 @@ const VideoGallery: React.FC = () => {
   const visibleVideos = filteredVideos.slice(0, visibleCount);
 
   return (
-    <section className="py-10 px-4 bg-gray-50 min-h-screen">
+    <section className="py-10 pt-6 px-4 bg-gray-50 min-h-screen">
       {/* ---------------- Title Section ---------------- */}
-      <div className="text-center mb-8">
+      <div className="text-center mb-5">
         <h1 className="text-3xl font-bold text-blue-700 mb-2">
           🎥 Video Gallery
         </h1>

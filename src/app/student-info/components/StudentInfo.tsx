@@ -22,7 +22,7 @@ const students = [
     id: '2113',
     roll: '5',
     name: 'Raju Ahmed',
-    class: 'Ten',
+    class: 'Nine',
     shift: 'Day',
     section: 'Ka',
     year: '2025',
@@ -74,9 +74,15 @@ export default function StudentCardPage() {
   return (
     <section className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 py-14 px-6">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-4xl font-bold text-center text-blue-700 mb-10">
+        <h1 className="text-4xl font-bold mb-3 text-center text-gray-800">
           Student Information
         </h1>
+     {/* subtitle */}
+
+     <p className="text-center text-gray-600 max-w-2xl mx-auto mb-4">
+  View detailed profiles of our students, including academic, personal, and contact information.
+</p>
+<div className="w-24 h-1 bg-blue-600 mx-auto rounded-full mb-10"></div>
 
         {/* Filters */}
         <div className="grid md:grid-cols-5 gap-6 bg-white/70 backdrop-blur-sm p-6 rounded-2xl shadow-lg mb-10">
@@ -152,15 +158,16 @@ export default function StudentCardPage() {
                 className="bg-white rounded-2xl shadow-lg p-4 text-center transition"
               >
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-blue-100 shadow-sm">
-                    <Image
-                      src={student.photo}
-                      alt={student.name}
-                      width={80}
-                      height={80}
-                      className="object-cover w-full h-full"
-                    />
-                  </div>
+                 <div className="w-20 h-20 rounded-lg overflow-hidden border-2 border-blue-100 shadow-sm">
+  <Image
+    src={student.photo}
+    alt={student.name}
+    width={80}
+    height={80}
+    className="object-cover w-full h-full"
+  />
+</div>
+
                   <div className="text-left">
                     <h2 className="text-lg font-semibold text-gray-800">{student.name}</h2>
                     <p className="text-sm text-gray-500">ID: {student.id}</p>

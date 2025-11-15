@@ -24,14 +24,14 @@ const InstituteDetailsBangladesh = () => {
       icon: <MapPinIcon className="w-5 h-5 text-blue-500" />,
       content: (
         <ul className="space-y-2 text-gray-700 mt-2">
-          <li><strong>Name:</strong> Sunrise High School & College</li>
-          <li><strong>Established:</strong> 1995</li>
+          <li><strong>Name:</strong> Kumulli Bachchu Mia Model High School</li>
+          <li><strong>Established:</strong> 2012</li>
           <li><strong>Board / Affiliation:</strong> Dhaka Board</li>
-          <li><strong>EIIN:</strong> 123456</li>
-          <li><strong>Principal:</strong> Mr. ABC</li>
+          <li><strong>EIIN:</strong> 135585</li>
+          <li><strong>Principal:</strong> Mr. Solim Uddin</li>
           <li className="flex items-center gap-2"><PhoneIcon className="w-5 h-5 text-blue-500" /> +880 1234 567890</li>
-          <li className="flex items-center gap-2"><EnvelopeIcon className="w-5 h-5 text-green-500" /> info@sunrise.edu.bd</li>
-          <li className="flex items-center gap-2"><MapPinIcon className="w-5 h-5 text-red-500" /> House 12, Road 5, Mirpur, Dhaka</li>
+          <li className="flex items-center gap-2"><EnvelopeIcon className="w-5 h-5 text-green-500" /> kbmmhs40@gmail.com</li>
+          <li className="flex items-center gap-2"><MapPinIcon className="w-5 h-5 text-red-500" /> Kumolli, Manikganj Sadar, Manikganj-1800</li>
         </ul>
       ),
     },

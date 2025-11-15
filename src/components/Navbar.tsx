@@ -31,26 +31,26 @@ const menuItems = [
   {
     name: "Academic",
     dropdown: [
-      { name: "Admission", link: "#" },
-      { name: "Book List", link: "#" },
-      { name: "Dress", link: "#" },
-      { name: "Syllabus", link: "#" },
-      { name: "Class Routine", link: "#" },
-      { name: "Exam Routine", link: "#" },
+      { name: "Admission", link: "admission" },
+      { name: "Book List", link: "book-list" },
+      { name: "Dress", link: "dress" },
+      { name: "Syllabus", link: "syllabus" },
+      { name: "Class Routine", link: "class-routine" },
+      { name: "Exam Routine", link: "exam-routine" },
     ],
   },
   {
     name: "Result",
     dropdown: [
       { name: "School Result", link: "/school-result" },
-      { name: "Board Result", link: "#" },
+      { name: "Board Result", link: "https://eboardresults.com/v2/home" }, // external
     ],
   },
   {
     name: "Publications",
     dropdown: [
-      { name: "Magazine", link: "#" },
-      { name: "Media News", link: "#" },
+      { name: "Magazine", link: "/magazine" },
+      { name: "Media News", link: "/media-news" },
     ],
   },
   {
@@ -84,12 +84,73 @@ export default function Navbar() {
     setOpenDropdown(openDropdown === index ? null : index);
   };
 
+  const renderLink = (sub: { name: string; link: string }) => {
+    const isSubActive = sub.link === pathname;
+    const isExternal = sub.link.startsWith("http");
+
+    if (isExternal) {
+      return (
+        <a
+          href={sub.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`block px-4 py-2 rounded-lg cursor-pointer ${
+            isSubActive ? "bg-green-600" : "hover:bg-green-600"
+          }`}
+        >
+          {sub.name}
+        </a>
+      );
+    } else {
+      return (
+        <Link
+          href={sub.link || "#"}
+          className={`block px-4 py-2 rounded-lg cursor-pointer ${
+            isSubActive ? "bg-green-600" : "hover:bg-green-600"
+          }`}
+        >
+          {sub.name}
+        </Link>
+      );
+    }
+  };
+
+  const renderMobileLink = (sub: { name: string; link: string }) => {
+    const isSubActive = sub.link === pathname;
+    const isExternal = sub.link.startsWith("http");
+
+    if (isExternal) {
+      return (
+        <a
+          href={sub.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`block px-3 py-1 rounded-lg cursor-pointer ${
+            isSubActive ? "bg-green-600" : "hover:bg-green-600"
+          }`}
+        >
+          {sub.name}
+        </a>
+      );
+    } else {
+      return (
+        <Link
+          href={sub.link || "#"}
+          className={`block px-3 py-1 rounded-lg cursor-pointer ${
+            isSubActive ? "bg-green-600" : "hover:bg-green-600"
+          }`}
+        >
+          {sub.name}
+        </Link>
+      );
+    }
+  };
+
   return (
     <nav className="bg-blue-900 relative z-50">
       {/* Desktop Navbar */}
       <ul className="hidden md:flex justify-center items-center gap-2 py-3 text-white font-medium">
         {menuItems.map((item, i) => {
-          // Parent active check (child active included)
           const isParentActive = item.link
             ? pathname === item.link
             : item.dropdown
@@ -106,16 +167,18 @@ export default function Navbar() {
               {item.link || !item.dropdown ? (
                 <Link
                   href={item.link || "#"}
-                  className={`px-3 py-2 rounded-lg transition flex items-center gap-1 cursor-pointer 
-                    ${isParentActive ? "bg-green-600" : "hover:bg-green-600"}`}
+                  className={`px-3 py-2 rounded-lg transition flex items-center gap-1 cursor-pointer ${
+                    isParentActive ? "bg-green-600" : "hover:bg-green-600"
+                  }`}
                 >
                   {item.name}
                 </Link>
               ) : (
                 <button
                   onClick={() => item.dropdown && toggleDropdown(i)}
-                  className={`px-3 py-2 rounded-lg transition flex items-center gap-1 cursor-pointer
-                    ${isParentActive ? "bg-green-600" : "hover:bg-green-600"}`}
+                  className={`px-3 py-2 rounded-lg transition flex items-center gap-1 cursor-pointer ${
+                    isParentActive ? "bg-green-600" : "hover:bg-green-600"
+                  }`}
                 >
                   {item.name}
                   {item.dropdown &&
@@ -127,7 +190,7 @@ export default function Navbar() {
                 </button>
               )}
 
-              {/* Dropdown */}
+              {/* Desktop Dropdown */}
               <AnimatePresence>
                 {item.dropdown && openDropdown === i && (
                   <motion.ul
@@ -137,20 +200,11 @@ export default function Navbar() {
                     exit="exit"
                     className="absolute left-0 top-full mt-1 bg-blue-900 rounded-lg shadow-lg min-w-[150px] overflow-hidden"
                   >
-                    {item.dropdown.map((sub, idx) => {
-                      const isSubActive = sub.link === pathname;
-                      return (
-                        <motion.li key={idx} variants={itemVariants}>
-                          <Link
-                            href={sub.link || "#"}
-                            className={`block px-4 py-2 rounded-lg cursor-pointer
-                              ${isSubActive ? "bg-green-600" : "hover:bg-green-600"}`}
-                          >
-                            {sub.name}
-                          </Link>
-                        </motion.li>
-                      );
-                    })}
+                    {item.dropdown.map(sub => (
+                      <motion.li key={sub.name} variants={itemVariants}>
+                        {renderLink(sub)}
+                      </motion.li>
+                    ))}
                   </motion.ul>
                 )}
               </AnimatePresence>
@@ -188,16 +242,18 @@ export default function Navbar() {
                   {item.link || !item.dropdown ? (
                     <Link
                       href={item.link || "#"}
-                      className={`w-full text-left px-3 py-2 rounded-lg transition flex items-center justify-between cursor-pointer
-                        ${isParentActive ? "bg-green-600" : "hover:bg-green-600"}`}
+                      className={`w-full text-left px-3 py-2 rounded-lg transition flex items-center justify-between cursor-pointer ${
+                        isParentActive ? "bg-green-600" : "hover:bg-green-600"
+                      }`}
                     >
                       {item.name}
                     </Link>
                   ) : (
                     <button
                       onClick={() => item.dropdown && toggleDropdown(i)}
-                      className={`w-full text-left px-3 py-2 rounded-lg transition flex items-center justify-between cursor-pointer
-                        ${isParentActive ? "bg-green-600" : "hover:bg-green-600"}`}
+                      className={`w-full text-left px-3 py-2 rounded-lg transition flex items-center justify-between cursor-pointer ${
+                        isParentActive ? "bg-green-600" : "hover:bg-green-600"
+                      }`}
                     >
                       {item.name}
                       {item.dropdown &&
@@ -219,20 +275,11 @@ export default function Navbar() {
                         exit="exit"
                         className="pl-6 space-y-1 overflow-hidden"
                       >
-                        {item.dropdown.map((sub, idx) => {
-                          const isSubActive = sub.link === pathname;
-                          return (
-                            <motion.li key={idx} variants={itemVariants}>
-                              <Link
-                                href={sub.link || "#"}
-                                className={`block px-3 py-1 rounded-lg cursor-pointer
-                                  ${isSubActive ? "bg-green-600" : "hover:bg-green-600"}`}
-                              >
-                                {sub.name}
-                              </Link>
-                            </motion.li>
-                          );
-                        })}
+                        {item.dropdown.map(sub => (
+                          <motion.li key={sub.name} variants={itemVariants}>
+                            {renderMobileLink(sub)}
+                          </motion.li>
+                        ))}
                       </motion.ul>
                     )}
                   </AnimatePresence>
